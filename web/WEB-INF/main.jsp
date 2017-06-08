@@ -25,8 +25,7 @@
                 
                 <f:facet name="header">Nome do Arquivo</f:facet>
                 #{item.getNome()}
-                <h:commandLink action="#{loginBean.atualizar(item)}" value="#{item.getNome()}" />
-                
+                <h:commandLink action="#{loginBean.atualizar(item)}" value="#{item.getNome()}" />-<h:commandLink action="#{loginBean.deleta(item)}" value="Deletar?" />
                 <!--h:form>
                 <h:commandButton value="#{item.getNome()}" action="#{loginBean.atualizar(item)}" />
                 </h:form-->

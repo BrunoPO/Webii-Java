@@ -29,6 +29,7 @@ import javax.json.JsonObject;
 import javax.json.JsonValue;
 import javax.servlet.http.HttpServletResponse;
 import javax.mail.MessagingException;
+import org.apache.http.concurrent.Cancellable;
 
 /**
  *
@@ -182,6 +183,44 @@ public class LoginBean {
         System.out.println(resp);
         return resp;
         
+    }
+    public String deleta(Arquivo item){
+        try {
+            System.out.println("Open Teste Deletar--------");
+            String path = "";
+            for(int i = 1;i<migalha.size();i++){
+                path += migalha.get(i).getNome()+"/";
+            }
+            path += item.getNome();
+            System.out.println("Teste Nome Path:"+path);
+            String shakey =item.getId();
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            System.out.println("----Open Sha Delete---");
+            System.out.println(shakey);
+            System.out.println("----Exit Sha Delete---");
+            JsonObject j = Json.createObjectBuilder()
+                    .add("path", path)
+                    .add("message", "Add")
+                    .add("sha", shakey)
+                    .add("branch", Branch)
+                    .add("committer",
+                            Json.createObjectBuilder()
+                                    .add("name", "BrunoPO")
+                                    .add("email", "Bruno@Teste.io")
+                    )
+                    .build();
+            MyDelete request= new MyDelete("https://api.github.com/repos/BrunoPO/TesteGit/contents/"+path+"?access_token="+OAuth);
+            StringEntity params= new StringEntity(j.toString());
+            request.addHeader("content-type", "application/json");
+            request.setEntity(params);
+            HttpResponse response = httpClient.execute(request);
+            System.out.println("Exit Teste UploadNovo--------");
+        } catch (IOException ex) {
+            System.out.println("IOException Messagem == "+ex.getMessage().contains("201")+" - "+ex.getMessage());
+            if( ex.getMessage().contains("404") || ex.getMessage().contains("402"))
+                return "falha";
+        } 
+        return "sucesso";
     }
     public String uploadNovo(String name){
         try {
@@ -344,3 +383,13 @@ public class LoginBean {
     public String getMensagem() {return mensagem;}
     public void setMensagem(String mensagem) {this.mensagem = mensagem;}
 }
+class MyDelete extends HttpPost
+    {
+        public MyDelete(String url){
+            super(url);
+        }
+        @Override
+        public String getMethod() {
+            return "DELETE";
+        }
+    }
