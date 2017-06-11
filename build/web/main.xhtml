@@ -19,6 +19,7 @@
                 <f:ajax listener="#{loginBean.upload}" />
             </h:inputFile>
         </h:form>
+        
         <h:form>
            <ui:repeat value="#{loginBean.migalha}" var="item">
                 <h:commandLink value="#{item.getNome()}" action="#{loginBean.interacao(item)}" />>
@@ -38,7 +39,7 @@
             </h:column>
             <h:column>
                 <f:facet name="header">Tamanho</f:facet>
-                #{item.getIsPasta()}
+                #{item.IsPasta()}
             </h:column>
         </h:dataTable>
              

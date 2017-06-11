@@ -39,18 +39,23 @@ public class LoginBean {
     protected String ShaSubstitui;
     private List<Arquivo> migalha;
     private List<Arquivo> arquis;
-    private String login,senha,Branch;
+    private String login,senha,Branch,nomePastaAdd;
     private String mensagem;
     private Part file;
     private String OAuth;
     private Boolean wasUpdate;
+    protected List<String> extensoes; 
     public String back(){
-        migalha.remove(migalha.size()-1);
+        if(migalha.size()>=2){
+            migalha.remove(migalha.size()-1);
+        }
         return atualizar(migalha.get(migalha.size()-1));
     }
     public String processar() {
         System.out.print("open func processar");
         if (login.equals(senha)) {
+            extensoes= new ArrayList<String>();
+            extensoes.add("pdf");extensoes.add("doc");extensoes.add("ppt");extensoes.add("xls");extensoes.add("txt");extensoes.add("html");
             Branch = login;
             wasUpdate = false;
             OAuth = new Tokens().OAuth();
@@ -95,7 +100,7 @@ public class LoginBean {
         return "sucesso";
     }
     public String interacao(Arquivo item) {
-        if(item.getIsPasta()){
+        if(item.IsPasta()){
             return atualizar(item);
         }else
             return download(item);
@@ -214,12 +219,48 @@ public class LoginBean {
             request.addHeader("content-type", "application/json");
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
-            System.out.println("Exit Teste UploadNovo--------");
+            wasUpdate=true;
+            System.out.println("Exit Teste Deletar--------");
         } catch (IOException ex) {
             System.out.println("IOException Messagem == "+ex.getMessage().contains("201")+" - "+ex.getMessage());
             if( ex.getMessage().contains("404") || ex.getMessage().contains("402"))
                 return "falha";
         } 
+        return atualizar(null);
+    }
+    public String novaPasta() {
+        if(getNomePastaAdd()==null){
+            return "falha";
+        }
+        String path = "";
+        for(int i = 1;i<migalha.size();i++){
+            path += migalha.get(i).getNome()+"/";
+        }
+        try {
+            System.out.println("Open Teste novaPasta--------");
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            JsonObject j = Json.createObjectBuilder()
+                .add("message", "Add")
+                .add("content", "anNvbi1jb21wbGV0by8KanNvbi1zZXRlLwpqc29uLwo=")
+                .add("branch", Branch)
+                .add("committer",
+                        Json.createObjectBuilder()
+                                .add("name", "BrunoPO")
+                                .add("email", "Bruno@Teste.io")
+                )
+                .build();
+            HttpPut request= new HttpPut("https://api.github.com/repos/BrunoPO/TesteGit/contents/"+path+getNomePastaAdd()+"/.gitignore?access_token="+OAuth);
+            StringEntity params = new StringEntity(j.toString());
+            request.addHeader("content-type", "application/json");
+            request.setEntity(params);
+            HttpResponse response = httpClient.execute(request);
+            wasUpdate=true;
+            System.out.println("Exit Teste novaPasta--------");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return "sucesso";
     }
     public String uploadNovo(String name){
@@ -244,6 +285,7 @@ public class LoginBean {
             System.out.println("----Open Sha Upload---");
             System.out.println(ShaSubstitui);
             System.out.println(shakey);
+            System.out.println(fileContent);
             System.out.println("----Exit Sha Upload---");
             JsonObject j = Json.createObjectBuilder()
                     .add("message", "Add")
@@ -279,7 +321,7 @@ public class LoginBean {
         HttpResponse response;
         JsonObject jo;
         try {
-            if(item != null && item.getIsPasta()){
+            if(item != null && item.IsPasta()){
                 System.out.println("Pasta não é null");
                 System.out.println(item.getNome());
                 shakey = item.getId();
@@ -325,7 +367,7 @@ public class LoginBean {
                     Arquivo a = new Arquivo();
                     a.setNome("Base");
                     a.setId(shakey);
-                    a.setIsPasta(true);
+                    a.setPasta(true);
                     migalha = new ArrayList<Arquivo>();
                     migalha.add(a);
                 }
@@ -339,12 +381,28 @@ public class LoginBean {
             int i =0;
             for(JsonValue b : c ){
                 Arquivo a = new Arquivo();
+                String nome = ((JsonObject)b).getString("path");
                 if(((JsonObject)b).getString("type").equals("tree")){
-                   a.setIsPasta(true);
+                   a.setPasta(true);
                 }else{
-                   a.setIsPasta(false);
+                    a.setPasta(false);
+                    int dotIndex = nome.lastIndexOf(".");
+                    String ext = nome.subSequence(dotIndex+1,nome.length()).toString();
+                    boolean achouExt = false;
+                    for(String exts:extensoes){
+                        if(ext.equals(exts)){
+                            System.out.println("Iguais"+exts+ext);
+                            achouExt = true;
+                            break;
+                        }
+                    }
+                    if(achouExt)
+                        a.setImgPath(ext+".svg");
+                    else{
+                        a.setImgPath("default.svg");
+                    }
                 }
-                a.setNome(((JsonObject)b).getString("path"));
+                a.setNome(nome);
                 a.setId( ((JsonObject)b).getString("sha")) ;
                 if(a != null)
                     arquis.add(a);
@@ -370,6 +428,10 @@ public class LoginBean {
         }
         return "";
     }
+    
+
+    public String getNomePastaAdd() {return nomePastaAdd;}
+    public void setNomePastaAdd(String nomePastaAdd) {this.nomePastaAdd = nomePastaAdd;}
     public Part getFile() {return file;}
     public void setFile(Part file) {this.file = file;}
     public List<Arquivo> getArquis() {return arquis;}

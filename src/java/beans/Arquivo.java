@@ -11,8 +11,16 @@ package beans;
  * @author prog
  */
 public class Arquivo {
-    private String Caminho,id,nome,desc;
-    private Boolean isPasta,isNull,isOutdated;
+    private String Caminho,id,nome,desc,ImgPath;
+
+    public String getImgPath() {
+        return ImgPath;
+    }
+
+    public void setImgPath(String ImgPath) {
+        this.ImgPath = ImgPath;
+    }
+    private Boolean Pasta,isNull,isOutdated;
 
     public Boolean getIsOutdated() {
         return isOutdated;
@@ -62,12 +70,12 @@ public class Arquivo {
         this.desc = desc;
     }
 
-    public Boolean getIsPasta() {
-        return isPasta;
+    public Boolean IsPasta() {
+        return Pasta;
     }
 
-    public void setIsPasta(Boolean isPasta) {
-        this.isPasta = isPasta;
+    public void setPasta(Boolean Pasta) {
+        this.Pasta = Pasta;
     }
     
 }

@@ -1,0 +1,72 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	margin-top: auto;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: auto;
+	padding-right: 0px;
+}
+body{
+	background-color:#fffff;
+	background-image:url(../img/Convertido.png);	
+}
+#welcome{ 
+	/*background-color: #EBEBEB;*/ 
+	font-family: 'Helvetica Neue',Helvetica,sans-serif;
+   	text-decoration: none;
+   	vertical-align: middle;
+   	min-width:300px;
+   	min-height: 400px;
+   	padding:20px;
+   	width:50%;
+   	height: auto;
+   	top:50%;
+   	left: 50%;
+   	position: absolute;
+   	transform: translate(-50%,-50%);	
+}
+#welcome um{
+   float: left;
+   clear: both;
+   margin: 2% 5%;
+}
+#logo{
+	width:30%;
+	margin-top: 20px;
+	height:auto;
+	float: left;
+	left: 50%;
+   	position: absolute;
+   	transform: translate(-50%,0%);			
+}
+#titulo{
+	float:left;
+	margin-top: 15%;
+	margin-left: 5%;
+	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
+	color:#272727;
+	font-size:46px;
+	text-align:center;	
+}
+.myButton{
+	float:left;
+	margin-left: 15%;
+	margin-right: 15%; 
+	margin-top: 10%;
+	background-color: #29bbff;    
+    border: 2px solid white;
+    padding: 10px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    color: white;	
+}
+.myButton:hover{
+	border: 2px solid #29bbff;
+	background-color: white;
+	color: #29bbff;	
+}
+
+

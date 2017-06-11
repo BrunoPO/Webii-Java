@@ -1,2 +1,0 @@
-beans.LoginBean
-beans.MyDelete
