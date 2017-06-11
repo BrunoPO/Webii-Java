@@ -12,6 +12,6 @@ package beans;
  */
 public class Tokens {
     public String OAuth(){
-        return "5de7c0345fb5910473638629a0ee75db553554fb";
+        return "";
     }
 }
