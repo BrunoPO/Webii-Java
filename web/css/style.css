@@ -207,7 +207,7 @@ a:hover{
 	-webkit-box-shadow: 0px 1px 2px #545454;
 	box-shadow: 0px 1px 2px #545454;
 }
-#Lista1 table tr td:active{
+#Lista1 table tr td.active{
 	background-color: #D0D0D0; 
 }
 #icon{

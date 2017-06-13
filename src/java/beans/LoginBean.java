@@ -407,14 +407,13 @@ public class LoginBean {
                 if(a != null)
                     arquis.add(a);
             }
-            
+            System.out.print(arquis);
+            System.out.print("exit func atualizar Deu certo");
+            return "sucesso";
         } catch (IOException ex) {
             System.out.print("exit func atualizar falhou");
             return "failure";
         }
-        System.out.print(arquis);
-        System.out.print("exit func atualizar Deu certo");
-        return "sucesso";
     }
     private String getSha(String Branch){
         try {

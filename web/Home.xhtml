@@ -8,20 +8,6 @@
 <h:head>
 <title>Smdrive</title><link href="css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	
-<script type="text/javascript">
-    function novoArquivo(){
-        document.getElementsByClassName("inputFile")[0].click();
-    }
-    function novaPasta() {
-        var Pasta = prompt("Por favor digite o nome da pasta", "Nova_Pasta");
-        if (Pasta != null) {
-            Pasta = Pasta.replace(" ","_");
-            document.getElementsByClassName("NomePastaAddInput")[0].value=Pasta;
-            document.getElementsByClassName("NomePastaAddButton")[0].click();
-        }
-    }
-</script>
 </h:head>
 
 <body>
@@ -94,13 +80,15 @@
                             </td>
                             <ui:repeat value="#{loginBean.arquis}" var="item">
                             <ui:fragment rendered="#{item.IsPasta()}">
-                            <td>
-                                <h:commandLink action="#{loginBean.interacao(item)}">
-                                    <div id="icon">
-                                            <img src="img/folder.svg" alt="" />
-                                        </div>                           
-                                    <p>#{item.getNome()}</p>
-                                </h:commandLink>
+                            <td class="clickebleTd">
+                                <input type="checkbox" style="display:none"></input>
+                                <h:commandLink class="select" action="#{loginBean.interacao(item)}" style="display:none" />
+                                <h:commandButton class="delete" action="#{loginBean.deleta(item)}" style="display:none" />
+                                <div id="icon">
+                                        <img src="img/folder.svg" alt="" />
+                                    </div>                           
+                                <p>#{item.getNome()}</p>
+                                
                             </td>
                             </ui:fragment> 
                             </ui:repeat>
@@ -122,20 +110,21 @@
                 <table border="0">             		
                     <tbody>
                         <tr>
+                            <h:form>
                             <ui:repeat value="#{loginBean.arquis}" var="item">
                             <ui:fragment rendered="#{!item.IsPasta()}">
-                            <td>
-                                <h:form>
-                                <h:commandLink action="#{loginBean.interacao(item)}">
-                                    <img src="img/exts/#{item.getImgPath()}" class="min" alt="" />
-                                    <div class="arq_name">
-                                    	#{item.getNome()}
-                                    </div>
-                                </h:commandLink>
-                                </h:form>
+                            <td class="clickebleTd">
+                                <input type="checkbox" style="display:none"></input>
+                                <h:commandLink class="select" action="#{loginBean.interacao(item)}" style="display:none" />
+                                <h:commandButton class="delete" action="#{loginBean.deleta(item)}" style="display:none" />
+                                <img src="img/exts/#{item.getImgPath()}" class="min" alt="" />
+                                <div class="arq_name">
+                                    #{item.getNome()}
+                                </div>
                             </td>
                             </ui:fragment> 
                             </ui:repeat>
+                            </h:form>
                         </tr>
                     </tbody>
                 </table>
@@ -144,5 +133,67 @@
         </section>
     </section>    
 </div>
+<script type="text/javascript">//<![CDATA[
+    function novoArquivo(){
+        document.getElementsByClassName("inputFile")[0].click();
+    }
+    function novaPasta() {
+        var Pasta = prompt("Por favor digite o nome da pasta", "Nova_Pasta");
+        if (Pasta != null) {
+            Pasta = Pasta.replace(" ","_");
+            document.getElementsByClassName("NomePastaAddInput")[0].value=Pasta;
+            document.getElementsByClassName("NomePastaAddButton")[0].click();
+        }
+    }
+    var v;
+    function clickedTd(x){
+        console.log("entrou")
+        v=x.target;
+        while(!v.classList.contains("clickebleTd")){
+            v = v.parentElement;
+        }
+        radio = v.getElementsByTagName("input")[0];
+        if(radio.checked){
+            v.children[1].click();
+            v.children[0].checked = false;
+            v.classList.remove("active");
+        }else{
+            var oldcheck=document.getElementsByClassName("active");
+            while(oldcheck.length>0){
+                oldcheck[0].getElementsByTagName("input")[0].checked = false;
+                oldcheck[0].classList.remove("active")
+            }
+            radio.checked = true;
+        }
+        if(radio.checked){
+            v.classList.add("active")
+        }else{
+            v.classList.remove("active")
+        }
+        console.log(v);
+    }
+    var DelPressed = false;
+    var clickbleTds=document.getElementsByClassName("clickebleTd");
+    for(var i=0;i<clickbleTds.length;i++){
+        console.log("ok");
+        //clickbleTds[i].onclick = clickedTd(this);
+        clickbleTds[i].addEventListener("click", clickedTd)
+    }
+    document.onkeypress = function(event) {
+        var key = event.keyCode || event.charCode;
+        if( key == 46 ){
+            DelPressed = true;
+            console.log("DelDown");
+            var oldcheck=document.getElementsByClassName("active");
+            if(oldcheck.length>0){
+                oldcheck[0].children[2].click();
+                oldcheck[0].getElementsByTagName("input")[0].checked = false;
+                oldcheck[0].classList.remove("active")
+            }
+        }
+        //return false;
+    };
+    //document.getElementsByTagName("BODY")[0].addEventListener("click", ClickedBody)
+//]]></script>
 </body>
 </html>
