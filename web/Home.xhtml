@@ -25,10 +25,10 @@
          </section> 
         <section id="pt2">		
             <div id="buttonNovo" style="margin-right:0px">
-                <a href="#" class="myButton" onclick="novoArquivo()"> Novo Arquivo </a>
+                <a href="javascript:void(null);" class="myButton" onclick="novoArquivo()"> Novo Arquivo </a> 
                 <h:form enctype="multipart/form-data" style="display: none">
                     <h:inputFile class="inputFile" value="#{loginBean.file}">
-                        <f:ajax listener="#{loginBean.upload}" />
+                        <f:ajax listener="#{loginBean.upload}" render="@all" />
                     </h:inputFile>
                 </h:form>
             </div>
@@ -191,9 +191,7 @@
                 oldcheck[0].classList.remove("active")
             }
         }
-        //return false;
     };
-    //document.getElementsByTagName("BODY")[0].addEventListener("click", ClickedBody)
 //]]></script>
 </body>
 </html>

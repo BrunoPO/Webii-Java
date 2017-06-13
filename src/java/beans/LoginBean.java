@@ -135,8 +135,9 @@ public class LoginBean {
         }
         return "sucesso";
     }
+    
     public String upload() throws MessagingException {
-        Boolean Substitui = true;
+        Boolean Substitui = false;
         System.out.println("Open Teste Upload--------");
         String nomeOriginal = file.getSubmittedFileName();
         int dotIndex = nomeOriginal.lastIndexOf(".");
@@ -221,12 +222,12 @@ public class LoginBean {
             HttpResponse response = httpClient.execute(request);
             wasUpdate=true;
             System.out.println("Exit Teste Deletar--------");
+            return atualizar(null);
         } catch (IOException ex) {
             System.out.println("IOException Messagem == "+ex.getMessage().contains("201")+" - "+ex.getMessage());
-            if( ex.getMessage().contains("404") || ex.getMessage().contains("402"))
+            //if( ex.getMessage().contains("404") || ex.getMessage().contains("402"))
                 return "falha";
         } 
-        return atualizar(null);
     }
     public String novaPasta() {
         if(getNomePastaAdd()==null){
@@ -256,12 +257,15 @@ public class LoginBean {
             HttpResponse response = httpClient.execute(request);
             wasUpdate=true;
             System.out.println("Exit Teste novaPasta--------");
+            //atualizar(null);
+            return atualizar(null);
         } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+            return "falha";
         } catch (IOException ex) {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+            return "falha";
         }
-        return "sucesso";
     }
     public String uploadNovo(String name){
         try {
@@ -304,12 +308,13 @@ public class LoginBean {
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
             System.out.println("Exit Teste UploadNovo--------");
+            return "sucesso";
         } catch (IOException ex) {
             System.out.println("IOException Messagem == "+ex.getMessage().contains("201")+" - "+ex.getMessage());
-            if( ex.getMessage().contains("404") || ex.getMessage().contains("402"))
+            //if( ex.getMessage().contains("404") || ex.getMessage().contains("402"))
                 return "falha";
         } 
-        return "sucesso";
+        
     }
     
     public String atualizar(Arquivo item){

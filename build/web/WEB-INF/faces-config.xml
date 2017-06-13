@@ -3,9 +3,7 @@
               xmlns="http://xmlns.jcp.org/xml/ns/javaee"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
-    <welcome-file-list>
-        <welcome-file>Login.xhtml</welcome-file>
-    </welcome-file-list>
+    
     <managed-bean>
         <managed-bean-name>loginBean</managed-bean-name>
         <managed-bean-class>beans.LoginBean</managed-bean-class>
@@ -49,7 +47,7 @@
             <from-outcome>recarregar</from-outcome>
             <to-view-id>/redirect.xhtml</to-view-id>
             <redirect />
-     </navigation-case>
+        </navigation-case>
         <navigation-case>
             <from-outcome>fracasso</from-outcome>
             <to-view-id>/Login.xhtml</to-view-id>

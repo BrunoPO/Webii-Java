@@ -60,6 +60,16 @@ header{
 	margin-right: 5% ; 
 }
 
+a{
+	text-decoration:none;
+	color:#145D7F;
+}
+a:visited{
+	color:#145D7F;
+}
+a:hover{
+	color:#272727;	
+}
 a.myButton:visited, .myButton {
 	background-color: #29bbff;    
     border: 2px solid white;
@@ -113,16 +123,6 @@ a.myButton:visited:hover,.myButton:hover{
 #teste option{
 	margin-left: 35px;
 	padding-top: 3%;	
-}
-a:link{
-	text-decoration:none;
-	color:#145D7F;
-}
-a:visited{
-	color:#145D7F;
-}
-a:hover{
-	color:#272727;	
 }
 #corpo{
 	background-color: #ECECEC;
