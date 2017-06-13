@@ -316,7 +316,45 @@ public class LoginBean {
         } 
         
     }
-    
+    public String atualizarFromBd(){
+        
+        try {
+            arquis = new ArrayList<Arquivo>();
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            httpClient = HttpClientBuilder.create().build();
+            String path="123";
+            int BarIndex = path.lastIndexOf("/");
+            String fileName = path.subSequence(BarIndex+1,path.length()).toString();
+            System.out.println("BarIndex : "+BarIndex);
+            path = path.subSequence(0,BarIndex+1).toString();
+            String id_dono="2"; 
+            HttpResponse response;
+            response = httpClient.execute(new HttpGet("https://api.github.com/repos/BrunoPO/TesteGit/contents/"+path+"?ref="+id_dono));
+            JsonArray c = Json.createReader(response.getEntity().getContent()).readArray();
+            //System.out.println(jo);
+            //JsonArray c = jo.getJsonArray("tree");
+            System.out.print(c);
+            for(JsonValue b : c ){
+                System.out.println(((JsonObject)b).getString("name")+" - "+fileName);
+                if(((JsonObject)b).getString("name").equals(fileName)){
+                    System.out.println("Achou Nomes Iguais para files from bd");
+                    Arquivo a = new Arquivo();
+                    a.setPasta(true);
+                    a.setNome(fileName);
+                    a.setId( ((JsonObject)b).getString("sha")) ;
+                    if(a != null)
+                        arquis.add(a);
+                    break;
+                }
+            }
+            return "sucesso";
+        } catch (IOException ex) {
+            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+            return "falha";
+        }
+        //select Id_Dono,Path from PastaCompart where Id in (select Id_Pasta from Compartilhado where Id_User=2);
+        
+    }
     public String atualizar(Arquivo item){
         System.out.print("open func atualizar");
         arquis = new ArrayList<Arquivo>();
@@ -330,6 +368,8 @@ public class LoginBean {
                 System.out.println("Pasta não é null");
                 System.out.println(item.getNome());
                 shakey = item.getId();
+                if(shakey == null)
+                    return atualizarFromBd();
                 int index = migalha.indexOf(item);
                 if(index>-1){
                         while(migalha.size() > index+1){
@@ -396,7 +436,6 @@ public class LoginBean {
                     boolean achouExt = false;
                     for(String exts:extensoes){
                         if(ext.equals(exts)){
-                            System.out.println("Iguais"+exts+ext);
                             achouExt = true;
                             break;
                         }
