@@ -1,17 +1,11 @@
 package beans;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author prog
- */
 public class Arquivo {
-    private String Caminho,id,nome,desc,ImgPath;
+    private String Caminho,id,nome,desc,ImgPath,Path;
+
+    public String getPath() {return Path;}
+
+    public void setPath(String Path) {this.Path = Path;}
 
     public String getImgPath() {
         return ImgPath;

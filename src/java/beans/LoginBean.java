@@ -101,16 +101,19 @@ public class LoginBean {
     }
     public String interacao(Arquivo item) {
         if(item.IsPasta()){
-            return atualizar(item);
+            if(migalha.indexOf(item)==0 && item.getPath() == null)
+                return atualizarFromBd();
+            else
+                return atualizar(item);
         }else
             return download(item);
     }
     public String download(Arquivo item){
         HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         String path = "";
-                for(int i = 1;i<migalha.size();i++){
-                    path += migalha.get(i).getNome()+"/";
-                }
+        for(int i = 1;i<migalha.size();i++){
+            path += migalha.get(i).getNome()+"/";
+        }
         path += item.getNome();
         String fileURL="https://raw.githubusercontent.com/BrunoPO/TesteGit/"+Branch+"/"+path;
         BufferedInputStream in = null;
@@ -318,7 +321,12 @@ public class LoginBean {
     }
     public String atualizarFromBd(){
         
-        try {
+            Arquivo a = new Arquivo();
+            a.setNome("Base");
+            a.setPath(null);
+            a.setPasta(true);
+            migalha = new ArrayList<Arquivo>();
+            migalha.add(a);
             arquis = new ArrayList<Arquivo>();
             HttpClient httpClient = HttpClientBuilder.create().build();
             httpClient = HttpClientBuilder.create().build();
@@ -328,7 +336,15 @@ public class LoginBean {
             System.out.println("BarIndex : "+BarIndex);
             path = path.subSequence(0,BarIndex+1).toString();
             String id_dono="2"; 
-            HttpResponse response;
+            
+            a = new Arquivo();
+            a.setPasta(true);
+            a.setPath(id_dono+"/"+path);
+            a.setNome(fileName);
+            //a.setId( ((JsonObject)b).getString("sha")) ;
+            if(a != null)
+                arquis.add(a);
+            /*HttpResponse response;
             response = httpClient.execute(new HttpGet("https://api.github.com/repos/BrunoPO/TesteGit/contents/"+path+"?ref="+id_dono));
             JsonArray c = Json.createReader(response.getEntity().getContent()).readArray();
             //System.out.println(jo);
@@ -346,12 +362,8 @@ public class LoginBean {
                         arquis.add(a);
                     break;
                 }
-            }
+            }*/
             return "sucesso";
-        } catch (IOException ex) {
-            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
-            return "falha";
-        }
         //select Id_Dono,Path from PastaCompart where Id in (select Id_Pasta from Compartilhado where Id_User=2);
         
     }
@@ -364,6 +376,7 @@ public class LoginBean {
         HttpResponse response;
         JsonObject jo;
         try {
+            /*
             if(item != null && item.IsPasta()){
                 System.out.println("Pasta não é null");
                 System.out.println(item.getNome());
@@ -372,12 +385,13 @@ public class LoginBean {
                     return atualizarFromBd();
                 int index = migalha.indexOf(item);
                 if(index>-1){
-                        while(migalha.size() > index+1){
-                            migalha.remove(index+1);
-                        }
-                 }else{
-                     migalha.add(item);
-                 }
+                    while(migalha.size() > index+1){
+                        migalha.remove(index+1);
+                    }
+                }else{
+                    migalha.add(item);
+                }
+                
             }else{
                 System.out.println("Passou was:"+wasUpdate);    
                 if(wasUpdate){
@@ -408,27 +422,94 @@ public class LoginBean {
                 }else{ 
                     System.out.println("Item é null");
                     httpClient = HttpClientBuilder.create().build();
-                    shakey = shakey = getSha(Branch);
+                    shakey = getSha(Branch);
                     Arquivo a = new Arquivo();
                     a.setNome("Base");
+                    a.setPath(Branch+"/");
                     a.setId(shakey);
                     a.setPasta(true);
                     migalha = new ArrayList<Arquivo>();
                     migalha.add(a);
                 }
+            }*/
+            String ref ="";
+            String Base ="";
+            String path = "";
+            System.out.println("Open Migalha");
+            System.out.println(migalha);
+            System.out.println(migalha.size());
+            System.out.println("Exit Migalha");
+            if(item==null){
+                System.out.println("Item é null");
+                httpClient = HttpClientBuilder.create().build();
+                //shakey = getSha(Branch);
+                Arquivo a = new Arquivo();
+                a.setNome("Base");
+                a.setPath(Branch+"/");
+                ref=Branch;
+                //a.setId(shakey);
+                a.setPasta(true);
+                migalha = new ArrayList<Arquivo>();
+                migalha.add(a);
+            }else if(migalha.get(0).getPath() == null){
+                System.out.println("Base:Null");
+                int index = migalha.indexOf(item);
+                if(index>-1){
+                    if(index==0)
+                        return atualizarFromBd();
+                    while(migalha.size() > index+1){
+                        migalha.remove(index+1);
+                    }
+                }else{
+                    migalha.add(item);
+                }    
+                ref = migalha.get(1).getPath();
+                int barIndex = ref.indexOf("/");
+                Base = ref.subSequence(barIndex,ref.length()).toString();
+                ref = ref.subSequence(0,barIndex).toString();
+                System.out.println("Resultado:"+ref+" - "+Base);
+                for (int i=2;i<migalha.size();i++){
+                    path+=migalha.get(i).getPath()+"/";
+                }
+                if(migalha.size()>2)
+                    path = path.subSequence(0,path.length()-1).toString();
+            }else{
+                System.out.println("Base:Dir");
+                ref = migalha.get(0).getPath();
+                int barIndex = ref.indexOf("/");
+                Base = ref.subSequence(barIndex,ref.length()).toString();
+                ref = ref.subSequence(0,barIndex).toString();
+                System.out.println("Resultado:"+ref+" - "+Base);
+                int index = migalha.indexOf(item);
+                if(index>-1){
+                    while(migalha.size() > index+1){
+                        migalha.remove(index+1);
+                    }
+                }else{
+                    migalha.add(item);
+                } 
+                for (int i=1;i<migalha.size();i++){
+                    path+=migalha.get(i).getPath()+"/";
+                }
+                if(migalha.size()>1)
+                    path = path.subSequence(0,path.length()-1).toString();
+                else
+                    Base ="";
             }
+            
+            System.out.println("Path:"+path);
+            
             httpClient = HttpClientBuilder.create().build();
-            response = httpClient.execute(new HttpGet("https://api.github.com/repos/BrunoPO/TesteGit/git/trees/"+shakey));
-            jo = Json.createReader(response.getEntity().getContent()).readObject();
-            System.out.println(jo);
-            c = jo.getJsonArray("tree");
-            System.out.print(c);
+            System.out.println("https://api.github.com/repos/BrunoPO/TesteGit/contents"+Base+path+"?ref="+ref);
+            response = httpClient.execute(new HttpGet("https://api.github.com/repos/BrunoPO/TesteGit/contents/"+Base+path+"?ref="+ref));
+            c = Json.createReader(response.getEntity().getContent()).readArray();
             int i =0;
             for(JsonValue b : c ){
                 Arquivo a = new Arquivo();
-                String nome = ((JsonObject)b).getString("path");
-                if(((JsonObject)b).getString("type").equals("tree")){
+                String nome = ((JsonObject)b).getString("name");
+                if(((JsonObject)b).getString("type").equals("dir")){
                    a.setPasta(true);
+                   a.setPath(nome);
                 }else{
                     a.setPasta(false);
                     int dotIndex = nome.lastIndexOf(".");
