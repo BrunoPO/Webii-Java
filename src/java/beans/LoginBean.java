@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package beans;
-
-
 
 
 import Arquivo.Arquivo;
@@ -54,6 +47,46 @@ public class LoginBean {
             migalha.remove(migalha.size()-1);
         }
         return atualizar(migalha.get(migalha.size()-1));
+    }
+    public String compart(Arquivo item){
+        
+        System.out.println("-------- Open Compart");
+        System.out.println(item.toString());
+        item.getNome();
+        String path="";
+        int c = 0;
+        
+        if(migalha.get(0).getPath() == null)
+            c++;
+        String ref = migalha.get(0+c).getPath();
+        int barIndex = ref.indexOf("/");
+        String Base = ref.subSequence(barIndex,ref.length()).toString();
+        ref = ref.subSequence(0,barIndex).toString();
+        System.out.println("Resultado:"+ref+" - "+Base);
+        for (int i=1+c;i<migalha.size();i++){
+            path+=migalha.get(i).getPath()+"/";
+        }
+        
+        if(Base.equals("/"))
+           Base ="";
+        System.out.println("Teste Nome Path:"+path);
+        path+=item.getNome();
+        path = ref+"/"+path;
+        System.out.println("PathCompart:"+path);
+        
+        
+        
+        System.out.println("---------Open Bd");
+        /*
+        select ID from usuarios where login in ('log','1','2')
+        INSERT INTO PastaCompart (Path,Id_Dono) Values(path,dono) 
+        INSERT INTO Compartilhado Values(pasta,userFor,dono)
+        */
+        String Users = "'log','1','2'";
+        cli.criaFolderCompart(path,Users,ref);
+        System.out.println("---------Exit Bd");
+        System.out.println("-------- Exit Compart");
+        return "sucesso";
     }
     public String processar() {
         System.out.print("open func processar");

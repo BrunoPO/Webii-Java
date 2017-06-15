@@ -7,7 +7,6 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
 <h:head>
 <title>Smdrive</title><link href="css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 </h:head>
 
 <body>
@@ -41,6 +40,8 @@
                     <h:commandLink value="#{item.getNome()}" action="#{loginBean.interacao(item)}" />>
                 </ui:repeat> 
                 </h1>
+                <input type="button" value="delete" onclick="delet()" />
+                <input type="button" value="compart" onclick="compart()" />
             </h:form>	
             <!--h1 align=""><a href="#">Documentos</a>&gt;<a href="#">1</a>&gt;<a href="#">2</a>&gt;<a href="#">3</a></h1-->
             </section>
@@ -69,7 +70,7 @@
 	<section id="body">	
             <div id="Lista1">				
                 <p id="titulo"> Pastas</p>
-                <table border="0"><h:form>
+                <table border="0">
                     <tbody>
                         <tr>
                             <td>
@@ -84,8 +85,12 @@
                             <ui:fragment rendered="#{item.IsPasta()}">
                             <td class="clickebleTd">
                                 <input type="checkbox" style="display:none"></input>
+                                <h:form>
                                 <h:commandLink class="select" action="#{loginBean.interacao(item)}" style="display:none" />
-                                <h:commandButton class="delete" action="#{loginBean.deleta(item)}" style="display:none" />
+                                </h:form>
+                                <h:form>
+                                <h:commandButton class="compart" action="#{loginBean.compart(item)}" style="" />
+                                </h:form>
                                 <div id="icon">
                                         <img src="img/folder.svg" alt="" />
                                     </div>                           
@@ -106,7 +111,7 @@
                             </td>
                         </tr>
                     </tbody>
-                </h:form></table>
+                </table>
                 <div id="lista 2">
                 <p id="titulo"> Arquivos</p>
                 <table border="0">             		
@@ -174,11 +179,26 @@
         }
         console.log(v);
     }
+    function delet(){
+        var oldcheck=document.getElementsByClassName("active");
+        if(oldcheck.length>0){
+            oldcheck[0].children[2].click();
+            oldcheck[0].getElementsByTagName("input")[0].checked = false;
+            oldcheck[0].classList.remove("active")
+        }
+    }
+    function compart(){
+        var oldcheck=document.getElementsByClassName("active");
+        if(oldcheck.length>0){
+            oldcheck[0].children[2].click();
+            oldcheck[0].getElementsByTagName("input")[0].checked = false;
+            oldcheck[0].classList.remove("active")
+        }
+    }
     var DelPressed = false;
     var clickbleTds=document.getElementsByClassName("clickebleTd");
     for(var i=0;i<clickbleTds.length;i++){
         console.log("ok");
-        //clickbleTds[i].onclick = clickedTd(this);
         clickbleTds[i].addEventListener("click", clickedTd)
     }
     document.onkeypress = function(event) {
@@ -186,12 +206,7 @@
         if( key == 46 ){
             DelPressed = true;
             console.log("DelDown");
-            var oldcheck=document.getElementsByClassName("active");
-            if(oldcheck.length>0){
-                oldcheck[0].children[2].click();
-                oldcheck[0].getElementsByTagName("input")[0].checked = false;
-                oldcheck[0].classList.remove("active")
-            }
+            delet();
         }
     };
 //]]></script>

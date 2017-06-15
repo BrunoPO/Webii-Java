@@ -89,6 +89,42 @@ public class Client {
         System.out.println("Novo user, log:"+login);
         return true;
     }
+    public boolean criaFolderCompart(String path,String Users,String dono){
+        try {
+            /*
+            select ID from usuarios where login in ('log','1','2')
+            INSERT INTO PastaCompart (Path,Id_Dono) Values(path,dono)
+            INSERT INTO Compartilhado Values(pasta,userFor,dono)
+            */
+            String query = "INSERT INTO PastaCompart (Path,Id_Dono) Values(\""+path+"\",\""+dono+"\")";
+            ResultSet rs = null;
+            Access db = new Access();
+            System.out.println("query: "+query);
+            rs = db.insertSQL(query);
+            if(rs != null){
+                int id_pasta = rs.getInt(1);
+                System.out.println("Rs:"+id);
+                query = "select ID from usuarios where login in ("+Users+")";
+                rs = db.selectSQL(query);
+                List<Integer> Ids = new ArrayList<Integer>();
+                System.out.println("query:"+query);
+                while(rs.next()){
+                    Ids.add(rs.getInt(1));
+                }
+                for(int id : Ids){
+                    query = "INSERT INTO Compartilhado Values(\""+id_pasta+"\",\""+id+"\",\""+dono+"\")";
+                    System.out.println("query:"+query);
+                    db.insertSQL(query);
+                }
+            }else{
+                System.out.println("Rs:Null");
+            }
+        } catch (SQLException | IllegalAccessException | InstantiationException ex) {
+            
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+    }
     public List<Arquivo> FolderCompart(){
         List<Arquivo> compArqui = new ArrayList ();
         String query = "select Id_Dono,Path from PastaCompart where Id in (select Id_Pasta from Compartilhado where Id_User="+this.id+");";
