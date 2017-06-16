@@ -21,7 +21,15 @@ import java.util.logging.Logger;
  */
 public class Client {
     private String nome,email,login,id;
-    
+    private List<Arquivo> migalha;
+
+    public List<Arquivo> getMigalha() {
+        return migalha;
+    }
+
+    public void setMigalha(List<Arquivo> migalha) {
+        this.migalha = migalha;
+    }
     public String getId() {
         return id;
     }
@@ -138,7 +146,7 @@ public class Client {
                     Arquivo arq = new Arquivo();
                     String id_dono = rs.getString("Id_Dono");
                     String path = rs.getString("Path");
-                    arq.setPath(id_dono+"/"+path);
+                    arq.setPath(path);
                     arq.setPasta(true);
                     int BarIndex = path.lastIndexOf("/");
                     String fileName = path.subSequence(BarIndex+1,path.length()).toString();

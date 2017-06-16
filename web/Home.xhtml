@@ -42,7 +42,7 @@
                 </h1>
                 <input type="button" value="delete" onclick="delet()" />
                 <input type="button" value="compart" onclick="compart()" />
-            </h:form>	
+            </h:form>
             <!--h1 align=""><a href="#">Documentos</a>&gt;<a href="#">1</a>&gt;<a href="#">2</a>&gt;<a href="#">3</a></h1-->
             </section>
         </section>
@@ -74,30 +74,29 @@
                     <tbody>
                         <tr>
                             <td>
-                                <h:commandLink action="#{loginBean.back()}">
-                                    <div id="icon">
-                                        <img src="img/folder.svg" alt="" />
-                                    </div>      
-                                    <p>...</p>
-                                </h:commandLink>
+                                <h:form>
+                                    <h:commandLink action="#{loginBean.back()}">
+                                        <div id="icon">
+                                            <img src="img/folder.svg" alt="" />
+                                        </div>      
+                                        <p>...</p>
+                                    </h:commandLink>
+                                </h:form>
                             </td>
                             <ui:repeat value="#{loginBean.arquis}" var="item">
-                            <ui:fragment rendered="#{item.IsPasta()}">
-                            <td class="clickebleTd">
-                                <input type="checkbox" style="display:none"></input>
-                                <h:form>
-                                <h:commandLink class="select" action="#{loginBean.interacao(item)}" style="display:none" />
-                                </h:form>
-                                <h:form>
-                                <h:commandButton class="compart" action="#{loginBean.compart(item)}" style="" />
-                                </h:form>
-                                <div id="icon">
-                                        <img src="img/folder.svg" alt="" />
-                                    </div>                           
-                                <p>#{item.getNome()}</p>
-                                
-                            </td>
-                            </ui:fragment> 
+                                <ui:fragment rendered="#{item.IsPasta()}">
+                                <td class="clickebleTd">
+                                    <input type="checkbox" style="display:none"></input>
+                                    <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
+                                    <h:form style="display:none;">
+                                        <h:inputText binding="#{loginBean.stringField}" value="" style=""/>
+                                        <h:commandButton class="compart" actionListener="#{loginBean.compart(item)}" />
+                                    </h:form><div id="icon">
+                                            <img src="img/folder.svg" alt="" />
+                                        </div>                           
+                                    <p>#{item.getNome()}</p>
+                                </td>
+                                </ui:fragment> 
                             </ui:repeat>
                             <td>
                                 <a href="#" onclick="novaPasta()">
@@ -106,8 +105,10 @@
                                     </div>      
                                     <p>Nova Pasta</p>
                                 </a>
+                                <h:form>
                                 <h:inputText class="NomePastaAddInput" value="#{loginBean.nomePastaAdd}" style="display: none;"/>
                                 <h:commandButton class="NomePastaAddButton" id="hdnBtn" actionListener="#{loginBean.novaPasta()}" style="display: none;" />
+                                </h:form>
                             </td>
                         </tr>
                     </tbody>
@@ -117,13 +118,12 @@
                 <table border="0">             		
                     <tbody>
                         <tr>
-                            <h:form>
                             <ui:repeat value="#{loginBean.arquis}" var="item">
                                 <ui:fragment rendered="#{!item.IsPasta()}">
                                 <td class="clickebleTd">
                                     <input type="checkbox" style="display:none"></input>
-                                    <h:commandLink class="select" action="#{loginBean.interacao(item)}" style="display:none" />
-                                    <h:commandButton class="delete" action="#{loginBean.deleta(item)}" style="display:none" />
+                                    <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
+                                    <h:form style="display:none"><h:commandButton class="delete" action="#{loginBean.deleta(item)}" /></h:form>
                                     <img src="img/exts/#{item.getImgPath()}" class="min" alt="" />
                                     <div class="arq_name">
                                         #{item.getNome()}
@@ -131,7 +131,6 @@
                                 </td>
                                 </ui:fragment> 
                             </ui:repeat>
-                            </h:form>
                         </tr>
                     </tbody>
                 </table>
@@ -140,75 +139,6 @@
         </section>
     </section>    
 </div>
-<script type="text/javascript">//<![CDATA[
-    function novoArquivo(){
-        document.getElementsByClassName("inputFile")[0].click();
-    }
-    function novaPasta() {
-        var Pasta = prompt("Por favor digite o nome da pasta", "Nova_Pasta");
-        if (Pasta != null) {
-            Pasta = Pasta.replace(" ","_");
-            document.getElementsByClassName("NomePastaAddInput")[0].value=Pasta;
-            document.getElementsByClassName("NomePastaAddButton")[0].click();
-        }
-    }
-    var v;
-    function clickedTd(x){
-        console.log("entrou")
-        v=x.target;
-        while(!v.classList.contains("clickebleTd")){
-            v = v.parentElement;
-        }
-        radio = v.getElementsByTagName("input")[0];
-        if(radio.checked){
-            v.children[1].click();
-            v.children[0].checked = false;
-            v.classList.remove("active");
-        }else{
-            var oldcheck=document.getElementsByClassName("active");
-            while(oldcheck.length>0){
-                oldcheck[0].getElementsByTagName("input")[0].checked = false;
-                oldcheck[0].classList.remove("active")
-            }
-            radio.checked = true;
-        }
-        if(radio.checked){
-            v.classList.add("active")
-        }else{
-            v.classList.remove("active")
-        }
-        console.log(v);
-    }
-    function delet(){
-        var oldcheck=document.getElementsByClassName("active");
-        if(oldcheck.length>0){
-            oldcheck[0].children[2].click();
-            oldcheck[0].getElementsByTagName("input")[0].checked = false;
-            oldcheck[0].classList.remove("active")
-        }
-    }
-    function compart(){
-        var oldcheck=document.getElementsByClassName("active");
-        if(oldcheck.length>0){
-            oldcheck[0].children[2].click();
-            oldcheck[0].getElementsByTagName("input")[0].checked = false;
-            oldcheck[0].classList.remove("active")
-        }
-    }
-    var DelPressed = false;
-    var clickbleTds=document.getElementsByClassName("clickebleTd");
-    for(var i=0;i<clickbleTds.length;i++){
-        console.log("ok");
-        clickbleTds[i].addEventListener("click", clickedTd)
-    }
-    document.onkeypress = function(event) {
-        var key = event.keyCode || event.charCode;
-        if( key == 46 ){
-            DelPressed = true;
-            console.log("DelDown");
-            delet();
-        }
-    };
-//]]></script>
+<script type="text/javascript" src="js/scriptHome.js"></script>
 </body>
 </html>

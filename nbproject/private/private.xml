@@ -4,11 +4,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/web/Home.xhtml</file>
-            <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/src/java/beans/Tokens.java</file>
             <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/src/java/beans/LoginBean.java</file>
+            <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/web/js/scriptHome.js</file>
             <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/web/Login.xhtml</file>
-            <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/web/WEB-INF/faces-config.xml</file>
-            <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/nbproject/build-impl.xml</file>
             <file>file:/mnt/Compart/Projetos/UFC/6/Web/Webii-Java-master/src/java/User/Client.java</file>
         </group>
     </open-files>
