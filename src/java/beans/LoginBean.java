@@ -3,6 +3,8 @@ package beans;
 import javax.servlet.http.*;
 import Arquivo.Arquivo;
 import User.Client;
+import actions.cliente.ClienteDAO;
+import entidades.cliente.Cliente;
 import java.util.List;
 import java.util.ArrayList;
 import java.net.URL;
@@ -16,6 +18,9 @@ import java.util.Base64;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 import javax.json.Json;
@@ -23,14 +28,14 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
 import javax.servlet.http.HttpServletResponse;
-import javax.mail.MessagingException;
 import org.apache.http.concurrent.Cancellable;
 import javax.faces.component.UIInput;
 /**
  *
  * @author prog
  */
-
+@ManagedBean(name="loginBean")
+@SessionScoped
 public class LoginBean {
     protected String ShaSubstitui;
     private List<Arquivo> migalha;
@@ -40,7 +45,17 @@ public class LoginBean {
     private Part file;
     private String OAuth;
     private Boolean wasUpdate;
+    
+    @ManagedProperty(value="#{cli}")
     protected Client cli;
+
+    public Client getCli() {
+        return cli;
+    }
+
+    public void setCli(Client cli) {
+        this.cli = cli;
+    }
     private UIInput stringField;
 
     public UIInput getStringField() {return stringField;}
@@ -98,11 +113,12 @@ public class LoginBean {
             cli = new Client();
             System.out.println("Login: "+login);
             System.out.println("Senha: "+senha);
-            if(cli.Conferir(login,senha)){
+            if(cli.Conferir(login, senha)){
                 setMensagem("");
+                
                 extensoes= new ArrayList<String>();
                 extensoes.add("pdf");extensoes.add("doc");extensoes.add("ppt");extensoes.add("xls");extensoes.add("txt");extensoes.add("html");
-                Branch = login;
+                Branch = cli.getId();
                 wasUpdate = false;
                 OAuth = new Tokens().OAuth();
                 migalha = new ArrayList<Arquivo>();
@@ -114,49 +130,8 @@ public class LoginBean {
             } 
         }
     }
-    public String logout(){
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        cli =(Client) session.getAttribute("User");
-        if(cli!=null){
-            cli=null;
-            session.setAttribute("User",cli);
-            session.invalidate();
-        }
-        return "logout";
-    }
-    public String cadastro(){
-        if (login.equals(senha)) {
-            OAuth = new Tokens().OAuth();
-            
-            String shakey="";
-            HttpClient httpClient = HttpClientBuilder.create().build();
-
-            try {
-                shakey=getSha(Branch);
-                httpClient = HttpClientBuilder.create().build();
-                JsonObject jo = Json.createObjectBuilder()
-                        .add("ref","refs/heads/"+login)
-                        .add("sha",shakey)
-                .build();
-                System.out.println("Testando json+="+jo.toString());
-                HttpPost request = new HttpPost("https://api.github.com/repos/BrunoPO/Testegit/git/refs?access_token="+OAuth);
-                StringEntity params =new StringEntity(jo.toString());
-                request.addHeader("content-type", "application/json");
-                request.setEntity(params);
-                HttpResponse response = httpClient.execute(request);
-                System.out.println("Testando params+="+params);
-                System.out.println(response.getEntity().toString());
-                System.out.println(request.getMethod());
-                System.out.println("Fim testando json");
-
-            }catch (Exception ex) {
-                Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-        return "sucesso";
-    }
+    
+    
     public String interacao(Arquivo item) {
         if(item.IsPasta()){
             if(migalha.indexOf(item)==0 && item.getPath() == null)
@@ -227,7 +202,7 @@ public class LoginBean {
         return "sucesso";
     }
     
-    public String upload() throws MessagingException {
+    public String upload() {
         Boolean Substitui = false;
         System.out.println("Open Teste Upload--------");
         String nomeOriginal = file.getSubmittedFileName();

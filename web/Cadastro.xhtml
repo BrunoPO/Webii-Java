@@ -4,37 +4,42 @@
    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
   <head>
     <meta content="" />
     <title>
-      Cadastro
+        Cadastro
     </title>
     <link rel="stylesheet" type="text/css" href="css/form-style.css" />
   </head>
   <body>
-    <form class="form-container-cadas" action="index.xhtml">
+    <h:form class="form-container-cadas">
       <a href="#"><img src="img/recorte.png" alt="smdrive" id="logo" /></a>
       <div id="signup">
         Sign up
       </div>
       <div class="form-title">
-        Nome
+        Nome do usuario
       </div>
-      <input class="form-field" type="text" name="firstname" /><br />
+      <h:inputText class="form-field" binding="#{requestBean.nome}" /><br />
       <div class="form-title">
-        Nome de usuario
+        Login 
       </div>
-      <input class="form-field" type="text" name="email" /><br />
+      <h:inputText class="form-field" binding="#{requestBean.login}" /><br />
+      <div class="form-title">
+        Email
+      </div>
+      <h:inputText class="form-field" binding="#{requestBean.email}" /><br />
       <div class="form-title">
         Criar uma senha
       </div>
-      <input class="form-field" type="text" name="email" /><br />
+      <h:inputText class="form-field" binding="#{requestBean.senha}" /><br />
       <div class="form-title">
         Confirmar Senha
       </div>
-      <input class="form-field" type="text" name="email" /><br />
-      <div class="form-title">
+      <input class="form-field" type="text" name="confirmaSenha" /><br />
+      <!--div class="form-title">
         Nascimento
       </div>
       <input class="data" id="dia" type="text" name="email" /> <select
@@ -93,10 +98,10 @@
       <div class="form-title">
         País
       </div>
-      <input class="form-field" type="text" name="email" /><br />
+      <input class="form-field" type="text" name="email" /><br /-->
       <div class="submit-container">
-        <input class="submit-button-cadas" type="submit" value="Submit" />
+        <h:commandButton class="submit-button-cadas" action="#{requestBean.cadastroUser}" value="Confirmar" />
       </div>
-    </form>
+    </h:form>
   </body>
 </html>

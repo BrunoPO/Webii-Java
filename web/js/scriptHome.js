@@ -49,7 +49,8 @@ function delet(){
 }
 function compart(){
     var oldcheck=document.getElementsByClassName("active");
-    var Users = prompt("Digite os usuarios seperados por virgula", "'log','1','2'");
+    //var Users = prompt("Digite os usuarios seperados por virgula", "'log','1','2'");
+    var Users = inputPopUp.value;
     console.log(Users);
     console.log(Users);
     if(oldcheck.length>0 && Users!= null && Users!= ""){

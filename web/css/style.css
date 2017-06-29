@@ -5,11 +5,18 @@
 	margin-bottom: auto;
 	padding-right: 0px;
 }
+#background{
+	background-color:#fff;
+	opacity: 0.7;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index:2;
+}
 body{
-    background-color:#ECECEC;
-    position: absolute;
+	position: absolute;
     width: 100%;
-    height: 100%;
+	height: 100%;
 }
 
 #pagina_home{
@@ -33,13 +40,11 @@ header{
 	margin-left: 5%;
 	float: left;
 }
-
 #busca form input {
 	margin-top: 15px;
 	width: 75%;
 	height: 50px;
-	border-radius: 5px;
-		
+	border-radius: 5px;		
 }
 #logo img{
 	width:150px;
@@ -48,7 +53,44 @@ header{
 	height:auto;
 	float: left;		
 }
-
+#user{
+    float: right;
+    margin-right: 3%;
+    margin-top: 1%;
+}
+#user img{
+    width:50px;
+    height:auto;	
+}
+#interacao {
+    float: right;
+    margin-right: 3%;
+}
+#interacao a{
+    
+}
+#interacao img{
+    width: 50px;
+}
+#container{
+	position: absolute;
+	height: auto;
+	width: auto;
+	background-color: #fff;
+	border-radius: 3px;
+	padding: 10px;
+	margin-left: -3%;
+	-webkit-box-shadow: 0px 0px 10px #A7A7A7;
+	box-shadow: 0px 0px 10px #A7A7A7;
+}
+.btn{
+	padding: 5px;
+	background-color: #fff;	
+}
+.btn:hover{
+	background-color:#CFCFCF;
+	padding: 5px;
+}
 #pt2 #buttonNovo{
 	float:left;
 	margin-left: 2%;
@@ -60,16 +102,6 @@ header{
 	margin-right: 5% ; 
 }
 
-a{
-	text-decoration:none;
-	color:#145D7F;
-}
-a:visited{
-	color:#145D7F;
-}
-a:hover{
-	color:#272727;	
-}
 a.myButton:visited, .myButton {
 	background-color: #29bbff;    
     border: 2px solid white;
@@ -107,6 +139,7 @@ a.myButton:visited:hover,.myButton:hover{
 	-webkit-box-shadow: 0px 0px 10px #A7A7A7;
 	box-shadow: 0px 0px 10px #A7A7A7;
 }
+
 #teste{
 	padding: 10px;
 	background-color: #fff;	
@@ -123,6 +156,16 @@ a.myButton:visited:hover,.myButton:hover{
 #teste option{
 	margin-left: 35px;
 	padding-top: 3%;	
+}
+a:link{
+	text-decoration:none;
+	color:#145D7F;
+}
+a:visited{
+	color:#145D7F;
+}
+a:hover{
+	color:#272727;	
 }
 #corpo{
 	background-color: #ECECEC;
@@ -251,4 +294,33 @@ a.myButton:visited:hover,.myButton:hover{
 	font-family:"Gill Sans", "Gill Sans MT", "Myriad Pro", "DejaVu Sans Condensed", Helvetica, Arial, sans-serif;
 	float:left;
 	padding:15px 25%;
+}
+#pop-up{
+    position: absolute;
+    width: 100%;
+    z-index: 3;
+    margin-top: 10%;
+    margin-left: 20%;
+    width: 60%;
+}
+#box{
+    background-color:#FFFFFF;
+    -webkit-box-shadow: 0px 1px 2px #545454;
+    box-shadow: 0px 1px 2px #545454;
+    padding-bottom: 5%;
+}
+#box form input {
+	margin-top: 50px;
+	margin-left: 10%;
+	width: 75%;
+	height: 25px;
+	border-radius: 5px;		
+}
+#box h1 {
+	padding-top: 50px;
+	margin-left: 15%;	
+}
+#btns {
+	margin-top: 8%;
+	margin-left: 25%;	
 }

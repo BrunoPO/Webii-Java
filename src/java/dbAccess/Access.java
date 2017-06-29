@@ -11,6 +11,23 @@ public class Access {
     private Statement statement = null;
     
     public Access(){
+        String url ="jdbc:postgresql://localhost:5432/BD1";
+        String user="postgres";
+        String senha = "postgres";
+        try {
+            Class.forName("org.postgresql.Driver");
+            this.connection = DriverManager.getConnection(url, user, senha);
+            this.statement = connection.createStatement(); 
+            System.out.println("Conexão realizada com sucesso.");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Erro Connect BD1");
+            Logger.getLogger(Access.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Access.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    /*Sqlite
+    public Access(){
         URL url = getClass().getResource("Data.db");
         System.out.println("Teste: "+url);
         String urls = url.toString();
@@ -24,7 +41,7 @@ public class Access {
         catch (ClassNotFoundException ex) {
             Logger.getLogger(Access.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
     
     public void connectionClose(){
         try {

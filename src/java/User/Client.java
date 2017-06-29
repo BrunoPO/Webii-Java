@@ -7,7 +7,9 @@ package User;
 
     
 import Arquivo.Arquivo;
+import actions.cliente.ClienteDAO;
 import dbAccess.Access;
+import entidades.cliente.Cliente;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,7 +22,7 @@ import java.util.logging.Logger;
  * @author prog
  */
 public class Client {
-    private String nome,email,login,id;
+    private Cliente cli;
     private List<Arquivo> migalha;
 
     public List<Arquivo> getMigalha() {
@@ -31,31 +33,45 @@ public class Client {
         this.migalha = migalha;
     }
     public String getId() {
-        return id;
+        return cli.getID().toString();
+    }
+    public Integer getIdInt() {
+        return cli.getID();
     }
     
     public String getLogin() {
-        return login;
+        return cli.getLogin();
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        //this.login = login;
     }
 
     public String getNome() {
-        return nome;
+        return cli.getNome();
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        //this.nome = nome;
     }
 
     public String getEmail() {
-        return email;
+        return cli.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        //this.email = email;
+    }
+    public boolean delete(){
+        new ClienteDAO().delete(cli);
+        //this.cli = new ClienteDAO().updateCliente(nome,email,login,senha);
+        System.out.println("Apos retorno");
+        System.out.println(cli);
+        System.out.println(cli.getNome());
+        if(cli==null)
+           return true;
+        else 
+           return false;
     }
     public boolean Deletar(){
         try {
@@ -70,7 +86,7 @@ public class Client {
         }
         return true;
     }
-    public boolean Alterar(String nome,String email,String login,String senha){
+    /*public boolean Alterar(String nome,String email,String login,String senha){
         System.out.println("ID:"+getId());
         String query = "UPDATE Usuarios SET nome='"+nome+"',email='"+email+"',login='"+login+"',senha='"+senha+"' WHERE ID = "+this.id+";";
         
@@ -96,7 +112,7 @@ public class Client {
         }
         System.out.println("Novo user, log:"+login);
         return true;
-    }
+    }*/
     public boolean criaFolderCompart(String path,String Users,String dono){
         try {
             /*
@@ -111,7 +127,7 @@ public class Client {
             rs = db.insertSQL(query);
             if(rs != null){
                 int id_pasta = rs.getInt(1);
-                System.out.println("Rs:"+id);
+                System.out.println("Rs:"+getId());
                 query = "select ID from usuarios where login in ("+Users+")";
                 rs = db.selectSQL(query);
                 List<Integer> Ids = new ArrayList<Integer>();
@@ -135,7 +151,7 @@ public class Client {
     }
     public List<Arquivo> FolderCompart(){
         List<Arquivo> compArqui = new ArrayList ();
-        String query = "select Id_Dono,Path from PastaCompart where Id in (select Id_Pasta from Compartilhado where Id_User="+this.id+");";
+        String query = "select Id_Dono,Path from PastaCompart where Id in (select Id_Pasta from Compartilhado where Id_User="+getId()+");";
         ResultSet rs = null;
         Access db = new Access();
         System.out.println("query: "+query);
@@ -160,41 +176,38 @@ public class Client {
         }
         return compArqui;
     }
+    public boolean confirmaSenha(String tentaSenha){
+        System.out.println(tentaSenha+" - "+cli.getSenha());
+        return tentaSenha.equals(cli.getSenha());
+    }
+    public boolean update(String nome,String email,String login,String senha){
+        Integer ID=cli.getID();
+        if(nome.equals("")) nome=cli.getNome();
+        if(email.equals("")) email=cli.getNome();
+        if(login.equals("")) login=cli.getLogin();
+        if(senha.equals("")) senha=cli.getSenha();
+        
+        Cliente clienteAlter = new Cliente();
+        clienteAlter.setID(ID);clienteAlter.setNome(nome);clienteAlter.setEmail(email);clienteAlter.setLogin(login);clienteAlter.setSenha(senha);
+        ClienteDAO clienteDAO = new ClienteDAO();
+        clienteDAO.update(clienteAlter);
+        //this.cli = new ClienteDAO().updateCliente(nome,email,login,senha);
+        System.out.println("Apos retorno");
+        System.out.println(cli);
+        System.out.println(cli.getNome());
+        if(cli==null)
+           return false;
+        else 
+           return true;
+    }
     public boolean Conferir(String login,String senha){
-        try {
-            String ID = "";
-            String User_nome="";
-            String User_login="";
-            String User_email="";
-            ResultSet rs = null;
-            Access db = new Access();
-            String query = "Select * from Usuarios where login='"+login+"' and senha='"+senha+"'";
-            System.out.println("query: "+query);
-            rs = db.selectSQL(query);
-            System.out.println("rs: "+rs);
-
-            if(rs != null){
-                while(rs.next()){
-                    ID = rs.getString("ID");
-                    User_nome = rs.getString("nome");
-                    User_login = rs.getString("login");
-                    User_email = rs.getString("email");
-                }
-                this.nome=User_nome;
-                this.login=User_login;
-                this.email=User_email;
-                this.id=ID;
-                System.out.println("Criacao_1ID"+this.id);
-                System.out.println("Criacao_2ID"+ID);
-                db.connectionClose();
-                if(User_nome!=""){
-                    return true;
-                }
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
+        this.cli = new ClienteDAO().validateCliente(login,senha);
+        System.out.println("Apos retorno");
+        System.out.println(cli);
+        System.out.println(cli.getNome());
+        if(cli==null)
+           return false;
+        else 
+           return true;
     }
 }

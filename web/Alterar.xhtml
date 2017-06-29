@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE html
+   PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+  <head>
+    <meta content="" />
+    <title>
+        Alterar
+    </title>
+    <link rel="stylesheet" type="text/css" href="css/form-style.css" />
+  </head>
+  <body>
+    <h:form class="form-container-cadas">
+      <a href="#"><img src="img/recorte.png" alt="smdrive" id="logo" /></a>
+      <div id="signup">
+        Update
+      </div>
+      <div class="form-title">
+        Nome do usuario
+      </div>
+      <h:inputText class="form-field" binding="#{requestBean.nome}" a:placeholder="#{loginBean.cli.nome}" /><br />
+      <div class="form-title">
+        Login 
+      </div>
+      <h:inputText class="form-field" binding="#{requestBean.login}" a:placeholder="#{loginBean.cli.login}" /><br />
+      <div class="form-title">
+        Email
+      </div>
+      <h:inputText class="form-field" binding="#{requestBean.email}" a:placeholder="#{loginBean.cli.email}"/><br />
+      <div class="form-title">
+        Nova Senha
+      </div>
+      <h:inputText class="form-field" binding="#{requestBean.senha}" /><br />
+      <div class="form-title">
+        Senha Antiga
+      </div>
+      <h:inputText class="form-field" binding="#{requestBean.confirma}" /><br />
+      <!--div class="form-title">
+        Nascimento
+      </div>
+      <input class="data" id="dia" type="text" name="email" /> <select
+      class="data" id="mes">
+      <option value="1">
+        Janeiro
+      </option>
+      <option value="2">
+        Fevereiro
+      </option>
+      <option value="3">
+        Março
+      </option>
+      <option value="4">
+        Abril
+      </option>
+      <option value="5">
+        Maio
+      </option>
+      <option value="6">
+        Junho
+      </option>
+      <option value="7">
+        Julho
+      </option>
+      <option value="8">
+        Agosto
+      </option>
+      <option value="9">
+        Setembro
+      </option>
+      <option value="10">
+        Outubro
+      </option>
+      <option value="11">
+        Novembro
+      </option>
+      <option value="12">
+        Dezembro
+      </option></select>
+      <input class="data" id="ano" type="text" name="email" /><br />
+      <div class="form-title">
+        Sexo
+      </div>
+      <select class="data" id="sexo">
+      <option value="volvo">
+        Feminino
+      </option>
+      <option value="saab">
+        Masculino
+      </option>
+      <option value="mercedes">
+        Outro
+      </option></select>
+      <br />
+      <div class="form-title">
+        País
+      </div>
+      <input class="form-field" type="text" name="email" /><br /-->
+      <div class="submit-container">
+        <h:commandButton class="submit-button-cadas" action="#{requestBean.AtualizaUser}" value="Confirmar" />
+      </div>
+    </h:form>
+  </body>
+</html>
