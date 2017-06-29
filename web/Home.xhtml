@@ -23,8 +23,8 @@ jQuery(document).ready(function( $ ){
         popUp = $('#pop-up');
         UserMenu = $('#container');
         butCompart = $('#interacao a:nth-child(2) img');
-        pasta = $('#Pasta');
-        item = $('#Item');
+        pasta = $('.Pasta');
+        item = $('.Item');
         botoes = $('#interacao a');
         inputPopUp = $("#box form input")[0];
         v = popUp;
@@ -80,6 +80,12 @@ jQuery(document).ready(function( $ ){
                 console.log(e.target)*/
                 UserMenu.hide();
             }
+        });
+        console.log($('.Item'));
+        $('.Item').each(function () {
+             var item = ($(this)).detach();
+             console.log(item);
+            ($('#lista2 tr')).append(item);
         });
 });
 function limpainput(){
@@ -182,7 +188,7 @@ function limpainput(){
 	</section>
 	<section id="body">	
             <div id="Lista1">				
-                <p id="titulo"> Pastas</p>
+                <p id="titulo"> <h:outputText rendered="#{loginBean.numfolder>0}" value="Pastas" /></p>
                 <table border="0">
                     <tbody>
                         <tr>
@@ -198,7 +204,7 @@ function limpainput(){
                             </td>
                             <ui:repeat value="#{loginBean.arquis}" var="item">
                                 <ui:fragment rendered="#{item.IsPasta()}">
-                                <td id="Pasta" class="clickebleTd">
+                                <td class="Pasta clickebleTd">
                                     <input type="checkbox" style="display:none"></input>
                                     <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
                                     <h:form style="display:none;">
@@ -210,6 +216,17 @@ function limpainput(){
                                     <p>#{item.getNome()}</p>
                                 </td>
                                 </ui:fragment> 
+                                <ui:fragment rendered="#{!item.IsPasta()}">
+                                <td class="Item clickebleTd">
+                                    <input type="checkbox" style="display:none"></input>
+                                    <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
+                                    <h:form style="display:none"><h:commandButton class="delete" action="#{loginBean.deleta(item)}" /></h:form>
+                                    <img src="img/exts/#{item.getImgPath()}" class="min" alt="" />
+                                    <div class="arq_name">
+                                        #{item.getNome()}
+                                    </div>
+                                </td>
+                                </ui:fragment>
                             </ui:repeat>
                             <td>
                                 <a href="#" onclick="novaPasta()">
@@ -226,24 +243,14 @@ function limpainput(){
                         </tr>
                     </tbody>
                 </table>
-                <div id="lista 2">
-                <p id="titulo"> Arquivos</p>
+                <div id="lista2">
+                <p id="titulo"><h:outputText rendered="#{loginBean.numfile>0}" value="Arquivos" /></p>
                 <table border="0">             		
                     <tbody>
                         <tr>
-                            <ui:repeat value="#{loginBean.arquis}" var="item">
-                                <ui:fragment rendered="#{!item.IsPasta()}">
-                                <td id="Item" class="clickebleTd">
-                                    <input type="checkbox" style="display:none"></input>
-                                    <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
-                                    <h:form style="display:none"><h:commandButton class="delete" action="#{loginBean.deleta(item)}" /></h:form>
-                                    <img src="img/exts/#{item.getImgPath()}" class="min" alt="" />
-                                    <div class="arq_name">
-                                        #{item.getNome()}
-                                    </div>
-                                </td>
-                                </ui:fragment> 
-                            </ui:repeat>
+                            <!--ui:repeat value="#{loginBean.arquis}" var="item">
+                                
+                            </ui:repeat-->
                         </tr>
                     </tbody>
                 </table>

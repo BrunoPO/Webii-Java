@@ -45,17 +45,11 @@ public class LoginBean {
     private Part file;
     private String OAuth;
     private Boolean wasUpdate;
+    private int numfile,numfolder;
     
     @ManagedProperty(value="#{cli}")
     protected Client cli;
-
-    public Client getCli() {
-        return cli;
-    }
-
-    public void setCli(Client cli) {
-        this.cli = cli;
-    }
+    
     private UIInput stringField;
 
     public UIInput getStringField() {return stringField;}
@@ -399,6 +393,7 @@ public class LoginBean {
         return "sucesso";
     }
     public String atualizar(Arquivo item){
+        numfile=0;numfolder=0;
         System.out.print("open func atualizar");
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpResponse response;
@@ -449,9 +444,11 @@ public class LoginBean {
                 String nome = ((JsonObject)b).getString("name");
                 if(((JsonObject)b).getString("type").equals("dir")){
                    a.setPasta(true);
+                   numfolder++;
                    a.setPath(nome);
                 }else{
                     a.setPasta(false);
+                    numfile++;
                     int dotIndex = nome.lastIndexOf(".");
                     String ext = nome.subSequence(dotIndex+1,nome.length()).toString();
                     boolean achouExt = false;
@@ -472,6 +469,8 @@ public class LoginBean {
                 if(a != null)
                     arquis.add(a);
             }
+            System.out.println(numfile);
+            System.out.println(numfolder);
             System.out.print(arquis);
             System.out.print("exit func atualizar Deu certo");
             return "sucesso";
@@ -493,6 +492,29 @@ public class LoginBean {
         return "";
     }
     
+    public Client getCli() {
+        return cli;
+    }
+
+    public void setCli(Client cli) {
+        this.cli = cli;
+    }
+    
+    public int getNumfile() {
+        return numfile;
+    }
+
+    public void setNumfile(int numfile) {
+        this.numfile = numfile;
+    }
+
+    public int getNumfolder() {
+        return numfolder;
+    }
+
+    public void setNumfolder(int numfolder) {
+        this.numfolder = numfolder;
+    }
     
     public String getNomePastaAdd() {return nomePastaAdd;}
     public void setNomePastaAdd(String nomePastaAdd) {this.nomePastaAdd = nomePastaAdd;}
