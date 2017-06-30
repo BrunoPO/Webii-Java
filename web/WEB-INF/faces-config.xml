@@ -72,8 +72,8 @@
             <redirect />
         </navigation-case>
         <navigation-case>
-            <from-outcome>recarregar</from-outcome>
-            <to-view-id>/redirect.xhtml</to-view-id>
+            <from-outcome>falhaUp</from-outcome>
+            <to-view-id>/Home.xhtml</to-view-id>
             <redirect />
         </navigation-case>
         <navigation-case>

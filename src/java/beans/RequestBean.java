@@ -36,9 +36,7 @@ public class RequestBean {
     public String logout(){
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        if(cli!=null){
-            session.invalidate();
-        }
+        session.invalidate();
         return "logout";
     }
     

@@ -28,13 +28,20 @@ public class Client {
     public List<Arquivo> getMigalha() {
         return migalha;
     }
-
+    
+    
+    public long getSizeUsed() {
+        return cli.getSizeUsed();
+    }
+    
+    
     public void setMigalha(List<Arquivo> migalha) {
         this.migalha = migalha;
     }
     public String getId() {
         return cli.getID().toString();
     }
+    
     public Integer getIdInt() {
         return cli.getID();
     }
@@ -120,23 +127,27 @@ public class Client {
             INSERT INTO PastaCompart (Path,Id_Dono) Values(path,dono)
             INSERT INTO Compartilhado Values(pasta,userFor,dono)
             */
-            String query = "INSERT INTO PastaCompart (Path,Id_Dono) Values(\""+path+"\",\""+dono+"\")";
+            String query = "INSERT INTO pastacompart (path,id_Dono) VALUES (\'"+path+"\',\'"+dono+"\')";
             ResultSet rs = null;
             Access db = new Access();
             System.out.println("query: "+query);
             rs = db.insertSQL(query);
-            if(rs != null){
-                int id_pasta = rs.getInt(1);
+            if(rs != null && rs.next()){
+                int id_pasta = (int) rs.getLong(1);
                 System.out.println("Rs:"+getId());
                 query = "select ID from usuarios where login in ("+Users+")";
+                System.out.println("query:"+query);
                 rs = db.selectSQL(query);
                 List<Integer> Ids = new ArrayList<Integer>();
-                System.out.println("query:"+query);
+                
+                if(rs!=null)
                 while(rs.next()){
-                    Ids.add(rs.getInt(1));
+                    Ids.add((int) rs.getInt(1));
                 }
+                else
+                    System.out.println("RS NULL");
                 for(int id : Ids){
-                    query = "INSERT INTO Compartilhado Values(\""+id_pasta+"\",\""+id+"\",\""+dono+"\")";
+                    query = "INSERT INTO compartilhado VALUES (\'"+id_pasta+"\',\'"+id+"\',\'"+dono+"\')";
                     System.out.println("query:"+query);
                     db.insertSQL(query);
                 }
@@ -180,15 +191,42 @@ public class Client {
         System.out.println(tentaSenha+" - "+cli.getSenha());
         return tentaSenha.equals(cli.getSenha());
     }
+    public boolean updateBytes(long size){
+        System.out.println("Update tamanho");
+        size=(size<0)?0:size;
+        Cliente clienteAlter = new Cliente();
+        clienteAlter.setID(cli.getID());
+        clienteAlter.setNome(cli.getNome());
+        clienteAlter.setEmail(cli.getEmail());
+        clienteAlter.setLogin(cli.getLogin());
+        clienteAlter.setSenha(cli.getSenha());
+        clienteAlter.setSizeUsed(size);
+        
+        ClienteDAO clienteDAO = new ClienteDAO();
+        clienteDAO.update(clienteAlter);
+        
+        System.out.println("Apos retorno");
+        System.out.println(cli);
+        System.out.println(cli.getNome());
+        if(cli==null)
+           return false;
+        else 
+           return true;
+    }
     public boolean update(String nome,String email,String login,String senha){
         Integer ID=cli.getID();
         if(nome.equals("")) nome=cli.getNome();
-        if(email.equals("")) email=cli.getNome();
+        if(email.equals("")) email=cli.getEmail();
         if(login.equals("")) login=cli.getLogin();
         if(senha.equals("")) senha=cli.getSenha();
         
         Cliente clienteAlter = new Cliente();
-        clienteAlter.setID(ID);clienteAlter.setNome(nome);clienteAlter.setEmail(email);clienteAlter.setLogin(login);clienteAlter.setSenha(senha);
+        clienteAlter.setID(ID);
+        clienteAlter.setNome(nome);
+        clienteAlter.setEmail(email);
+        clienteAlter.setLogin(login);
+        clienteAlter.setSenha(senha);
+        clienteAlter.setSizeUsed(cli.getSizeUsed());
         ClienteDAO clienteDAO = new ClienteDAO();
         clienteDAO.update(clienteAlter);
         //this.cli = new ClienteDAO().updateCliente(nome,email,login,senha);
@@ -203,8 +241,6 @@ public class Client {
     public boolean Conferir(String login,String senha){
         this.cli = new ClienteDAO().validateCliente(login,senha);
         System.out.println("Apos retorno");
-        System.out.println(cli);
-        System.out.println(cli.getNome());
         if(cli==null)
            return false;
         else 

@@ -35,6 +35,16 @@ public class Cliente implements Serializable {
     
     @Column(unique = true)
     private String login;
+    
+    private long sizeUsed;
+
+    public long getSizeUsed() {
+        return sizeUsed;
+    }
+
+    public void setSizeUsed(long sizeUsed) {
+        this.sizeUsed = sizeUsed;
+    }
 
     public Integer getID() {
         return ID;

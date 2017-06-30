@@ -2,7 +2,16 @@ package Arquivo;
 
 public class Arquivo {
     private String Caminho,id,nome,desc,ImgPath,Path;
+    private int size;
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+    
     public String getPath() {return Path;}
 
     public void setPath(String Path) {this.Path = Path;}

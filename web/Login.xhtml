@@ -5,7 +5,8 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
   <head>
     <meta content="" />
     <title>
@@ -22,11 +23,11 @@
       <div class="form-title">
         Email
       </div>
-      <h:inputText class="form-field" value="#{loginBean.login}" /><br />
+      <h:inputText a:name="user" class="form-field" value="#{loginBean.login}" /><br />
       <div class="form-title">
         Senha
       </div>
-      <h:inputSecret class="form-field" value="#{loginBean.senha}" /><br />
+      <h:inputSecret a:name="pwd" class="form-field" value="#{loginBean.senha}" /><br />
       <div><h:outputText value="#{loginBean.mensagem}" /></div>
       <div class="submit-container">
         <h:commandButton class="submit-button" action="#{loginBean.processar}" value="Entrar" />

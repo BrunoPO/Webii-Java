@@ -80,19 +80,20 @@ public class LoginBean {
         
         
         System.out.println("---------Open Bd");
-        System.out.println("Teste:"+stringField.getSubmittedValue().toString());
+        String Users = stringField.getSubmittedValue().toString();
+        System.out.println("Teste:"+Users);
         /*select ID from usuarios where login in ('log','1','2')
         INSERT INTO PastaCompart (Path,Id_Dono) Values(path,dono) 
         INSERT INTO Compartilhado Values(pasta,userFor,dono)
         */
         //String Users = "'log','1','2'";
         //System.out.println("Users"+Users);
-        System.out.println(getNomePastaAdd());
-        if(getNomePastaAdd() != null)
-            cli.criaFolderCompart(path,getNomePastaAdd(),ref);
+        System.out.println(item.getNome());
+        if(item.getNome() != null)
+            cli.criaFolderCompart(path,Users,ref);
         else{
-            System.out.println(getNomePastaAdd());
-            System.out.println(nomePastaAdd);
+            System.out.println(item.getNome());
+            System.out.println(item.getNome());
         }
         System.out.println("---------Exit Bd");
         System.out.println("-------- Exit Compart");
@@ -100,28 +101,23 @@ public class LoginBean {
     }
     public String processar() {
         System.out.print("open func processar");
-        if(cli != null ) {
-            System.out.println("Logado");
-            return "sucesso";
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        this.cli =(Client) session.getAttribute("cli");
+        if(cli == null) {
+            setMensagem("Usuario ou senha invalido");
+            System.out.println("Deslogado");
+            return "falha";
         }else{
-            cli = new Client();
-            System.out.println("Login: "+login);
-            System.out.println("Senha: "+senha);
-            if(cli.Conferir(login, senha)){
-                setMensagem("");
-                
-                extensoes= new ArrayList<String>();
-                extensoes.add("pdf");extensoes.add("doc");extensoes.add("ppt");extensoes.add("xls");extensoes.add("txt");extensoes.add("html");
-                Branch = cli.getId();
-                wasUpdate = false;
-                OAuth = new Tokens().OAuth();
-                migalha = new ArrayList<Arquivo>();
-                atualizar(null);
-                return "sucesso";
-            }else{
-                setMensagem("email ou senha incopativel");
-                return "falha";
-            } 
+            setMensagem("");
+            extensoes= new ArrayList<String>();
+            extensoes.add("pdf");extensoes.add("doc");extensoes.add("ppt");extensoes.add("xls");extensoes.add("txt");extensoes.add("html");
+            Branch = cli.getId();
+            wasUpdate = false;
+            OAuth = new Tokens().OAuth();
+            migalha = new ArrayList<Arquivo>();
+            atualizar(null);
+            return "sucesso";
         }
     }
     
@@ -197,6 +193,14 @@ public class LoginBean {
     }
     
     public String upload() {
+        long somaBytes = (file.getSize()+cli.getSizeUsed());
+        if(somaBytes>100000000){
+            setMensagem("Arquivo excedeu o limite de 100Mb por isso não pode ser completado");
+            return "falhaUp";
+        }
+        
+        System.out.println("Tamanho:");
+        System.out.println(file.getSize());
         Boolean Substitui = false;
         System.out.println("Open Teste Upload--------");
         String nomeOriginal = file.getSubmittedFileName();
@@ -243,10 +247,14 @@ public class LoginBean {
         System.out.println("Exit Teste Upload--------");
         System.out.println("Open Atualizado--------");
         String resp=atualizar(migalha.get(migalha.size()-1));
+        if(resp=="sucesso")
+            cli.updateBytes(somaBytes);
         System.out.println("Exit Atualizado--------");
         System.out.println(resp);
         resp=((resp=="sucesso")?"recarregar":resp);
         System.out.println(resp);
+        
+        
         return resp;
         
     }
@@ -285,6 +293,8 @@ public class LoginBean {
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
             wasUpdate=true;
+            long usedBytes = cli.getSizeUsed()-item.getSize();
+            cli.updateBytes(usedBytes);
             System.out.println("Exit Teste Deletar--------");
             return atualizar(migalha.get(migalha.size()-1));
         } catch (IOException ex) {
@@ -393,6 +403,7 @@ public class LoginBean {
         return "sucesso";
     }
     public String atualizar(Arquivo item){
+        setMensagem("");
         numfile=0;numfolder=0;
         System.out.print("open func atualizar");
         HttpClient httpClient = HttpClientBuilder.create().build();
@@ -448,6 +459,7 @@ public class LoginBean {
                    a.setPath(nome);
                 }else{
                     a.setPasta(false);
+                    a.setSize(((JsonObject)b).getInt("size"));
                     numfile++;
                     int dotIndex = nome.lastIndexOf(".");
                     String ext = nome.subSequence(dotIndex+1,nome.length()).toString();

@@ -11,7 +11,7 @@ public class Access {
     private Statement statement = null;
     
     public Access(){
-        String url ="jdbc:postgresql://localhost:5432/BD1";
+        String url ="jdbc:postgresql://localhost:5432/BD2";
         String user="postgres";
         String senha = "postgres";
         try {
@@ -91,7 +91,7 @@ public class Access {
         ResultSet rs = null;
 
         statement.executeUpdate(query);
-        rs = statement.executeQuery("SELECT last_insert_rowid() as ID;");
+        rs = statement.executeQuery("SELECT lastval();");
         //statement.close();
         return rs;
     }

@@ -52,7 +52,6 @@ function compart(){
     //var Users = prompt("Digite os usuarios seperados por virgula", "'log','1','2'");
     var Users = inputPopUp.value;
     console.log(Users);
-    console.log(Users);
     if(oldcheck.length>0 && Users!= null && Users!= ""){
         var td = oldcheck[0];
         td.getElementsByTagName("input")[0].checked = false;
@@ -62,6 +61,7 @@ function compart(){
         td.children[2].children[2].click();
         td.getElementsByTagName("input")[0].checked = false;
         td.classList.remove("active")
+        popUp.hide();background.hide();
     }
 }
 var DelPressed = false;

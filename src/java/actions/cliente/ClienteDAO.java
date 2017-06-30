@@ -33,19 +33,11 @@ public class ClienteDAO extends GenericDAO<Cliente> {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         
-        /*CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Cliente> criteriaQuery = criteriaBuilder.createQuery(Cliente.class);
-        Root<Cliente> rootCliente = criteriaQuery.from(Cliente.class);
-        */
         Criteria cr = session.createCriteria(Cliente.class);
         cr.add(Restrictions.eq("login", login.toLowerCase()));
         cr.add(Restrictions.eq("senha", senha.toLowerCase()));
         List<Cliente> clientes = cr.list();
         
-        //criteriaQuery.where(criteriaBuilder.and(criteriaBuilder.like(criteriaBuilder.lower(rootCliente.get("login")), "%" + login.toLowerCase() + "%"),criteriaBuilder.like(criteriaBuilder.lower(rootCliente.get("senha")), "%" + senha.toLowerCase() + "%")));
-        //List<Cliente> clientes = (List<Cliente>) session.createQuery(criteriaQuery).getResultList();
-        System.out.println(clientes);
-        System.out.println(clientes.get(0).getID());
         transaction.commit();
         session.close();
         if(clientes.size()>0)

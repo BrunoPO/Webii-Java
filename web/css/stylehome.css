@@ -50,11 +50,11 @@ body{
 	text-align:center;	
 }
 .myButton{
-	float:left;
-	margin-left: 15%;
-	margin-right: 15%; 
-	margin-top: 10%;
-	background-color: #29bbff;    
+    float:left;
+    margin-top: 10%;
+    margin-right: 13%;
+    margin-left: 13%;
+    background-color: #29bbff;    
     border: 2px solid white;
     padding: 10px 40px;
     text-align: center;

@@ -88,9 +88,33 @@ jQuery(document).ready(function( $ ){
             ($('#lista2 tr')).append(item);
         });
 });
+function verificaMensagem(){
+    var mensagem = document.getElementById("message").innerHTML;
+    if(mensagem!=""){
+        alert(mensagem);
+    }
+}
 function limpainput(){
     inputPopUp.value="";
     popUp.hide();background.hide();
+}
+
+function Busca() {
+    // Declare variables
+    var input, filter, li, a, i;
+    input = document.getElementById('Search');
+    filter = input.value.toUpperCase();
+    li = document.getElementsByTagName('td');
+
+    for (i = 0; i < li.length; i++) {
+        a = li[i].id;
+        console.log(a+" - "+filter);
+        if (filter=="" || a.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
 }
 //]]>
 </script>
@@ -98,6 +122,7 @@ function limpainput(){
 </h:head>
 
 <body>
+    <p id="message" style="display: none"><h:outputText value="#{loginBean.mensagem}" /></p>
 <section id="pop-up" style="display:none">
         <div id="box">
             <h1>
@@ -120,10 +145,10 @@ function limpainput(){
         </section>
         <section id="busca">                      
             <form>            	
-                <input type="text" />
+                <input id="Search" type="text" onkeyup="Busca()"/>
             </form>  
-            
-        </section> 
+        </section>
+        
         <section id="user">
             <img src="img/abstract-user-flat-3.png" />
             <div id="container" style="display:none">
@@ -144,7 +169,7 @@ function limpainput(){
                 <a href="javascript:void(null);" class="myButton" onclick="novoArquivo()"> Novo Arquivo </a> 
                 <h:form enctype="multipart/form-data" style="display: none">
                     <h:inputFile class="inputFile" value="#{loginBean.file}">
-                        <f:ajax listener="#{loginBean.upload}" render="@all" />
+                        <f:ajax event="change" listener="#{loginBean.upload}" render="@all" onevent="verificaMensagem" />
                     </h:inputFile>
                 </h:form>
             </div>
@@ -204,7 +229,7 @@ function limpainput(){
                             </td>
                             <ui:repeat value="#{loginBean.arquis}" var="item">
                                 <ui:fragment rendered="#{item.IsPasta()}">
-                                <td class="Pasta clickebleTd">
+                                <td id="#{item.getNome()}" class="Pasta clickebleTd">
                                     <input type="checkbox" style="display:none"></input>
                                     <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
                                     <h:form style="display:none;">
@@ -217,7 +242,7 @@ function limpainput(){
                                 </td>
                                 </ui:fragment> 
                                 <ui:fragment rendered="#{!item.IsPasta()}">
-                                <td class="Item clickebleTd">
+                                <td id="#{item.getNome()}" class="Item clickebleTd">
                                     <input type="checkbox" style="display:none"></input>
                                     <h:form style="display:none"><h:commandLink class="select" action="#{loginBean.interacao(item)}" /></h:form>
                                     <h:form style="display:none"><h:commandButton class="delete" action="#{loginBean.deleta(item)}" /></h:form>
@@ -248,9 +273,6 @@ function limpainput(){
                 <table border="0">             		
                     <tbody>
                         <tr>
-                            <!--ui:repeat value="#{loginBean.arquis}" var="item">
-                                
-                            </ui:repeat-->
                         </tr>
                     </tbody>
                 </table>
