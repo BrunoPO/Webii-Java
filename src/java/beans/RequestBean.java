@@ -81,7 +81,9 @@ public class RequestBean {
                 .build();
             
             System.out.println("Testando json+="+jo.toString());
-            HttpPost request = new HttpPost("https://api.github.com/repos/BrunoPO/Testegit/git/refs?access_token="+OAuth);
+            String url = "https://api.github.com/repos/BrunoPO/Testegit/git/refs?access_token="+OAuth;
+            System.out.println(url);
+            HttpPost request = new HttpPost(url);
             StringEntity params =new StringEntity(jo.toString());
             request.addHeader("content-type", "application/json");
             request.setEntity(params);

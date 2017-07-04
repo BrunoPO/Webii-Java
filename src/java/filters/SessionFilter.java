@@ -52,8 +52,8 @@ public class SessionFilter implements Filter{
                     session.setAttribute("loginBean.mensagem","usuario ou senha invalido");
                     ((HttpServletResponse) response).sendRedirect("Login.xhtml");
                 }
-            }
-            chain.doFilter(request, response);
+            }else
+                chain.doFilter(request, response);
         }
         
     }

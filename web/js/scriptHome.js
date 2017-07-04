@@ -53,11 +53,14 @@ function compart(){
     var Users = inputPopUp.value;
     console.log(Users);
     if(oldcheck.length>0 && Users!= null && Users!= ""){
+        localStorage.setItem("user", Users );
         var td = oldcheck[0];
         td.getElementsByTagName("input")[0].checked = false;
         td.classList.remove("active")
-        td.children[2].children[1].setAttribute('value',Users);
-        console.log(td.children[2].children[1].value);
+        td.children[2].children[1].value=Users;
+        localStorage.setItem("user", td.children[2].children[1].value );
+        //td.children[2].children[1].setAttribute('value',Users);
+        //console.log(td.children[2].children[1].value);
         td.children[2].children[2].click();
         td.getElementsByTagName("input")[0].checked = false;
         td.classList.remove("active")

@@ -80,7 +80,10 @@ public class LoginBean {
         
         
         System.out.println("---------Open Bd");
-        String Users = stringField.getSubmittedValue().toString();
+        
+        String Users = "";
+        if(stringField!=null && stringField.getValue().toString()!=null)
+            Users = stringField.getValue().toString();
         System.out.println("Teste:"+Users);
         /*select ID from usuarios where login in ('log','1','2')
         INSERT INTO PastaCompart (Path,Id_Dono) Values(path,dono) 
@@ -89,7 +92,7 @@ public class LoginBean {
         //String Users = "'log','1','2'";
         //System.out.println("Users"+Users);
         System.out.println(item.getNome());
-        if(item.getNome() != null)
+        if(item.getNome() != null && Users!="")
             cli.criaFolderCompart(path,Users,ref);
         else{
             System.out.println(item.getNome());
